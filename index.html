@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ФораБанк — Смена пароля</title>
+  <meta name="theme-color" content="#0a3d62" />
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --brand-50:#eef6ff;--brand-100:#d9ecff;--brand-200:#b9dbff;--brand-300:#8cc2ff;--brand-400:#58a4ff;--brand-500:#2c86ff;--brand-600:#1669db;--brand-700:#0f4fab;--brand-800:#0b3d80;--brand-900:#0a315f;
+      --ink-900:#0b0f14;--ink-700:#243142;--ink-600:#3a4a5d;--ink-500:#5b718a;--ink-400:#7f94ac;--ink-200:#c9d3e0;--ink-50:#f6f9fc;
+      --bg:#ffffff;--bg-soft:#f8fafc;--card:#ffffff;--border:#e5edf4;--shadow:0 10px 30px rgba(10,49,95,.08);
+      --success:#18a957;--danger:#cc2e3a;--warn:#be6a00;
+    }
+    /* @media (prefers-color-scheme: dark){
+      :root{--bg:#0c1220;--bg-soft:#0a1728;--card:#0f1b2e;--border:#13233a;--ink-900:#f2f6ff;--ink-600:#a7b9d6;--ink-400:#768eae;}
+    } */
+
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink-900);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
+    .container{max-width:600px;margin:0 auto;padding:40px 20px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--shadow)}
+    h1{font-size:clamp(22px,4vw,30px);margin:0 0 12px}
+    p{color:var(--ink-600);margin:0 0 16px}
+    form{display:grid;gap:14px}
+    .field{display:grid;gap:6px}
+    input{padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg-soft);color:inherit}
+    input:focus{outline:2px solid var(--brand-100);border-color:var(--brand-600)}
+    .btn{display:inline-flex;justify-content:center;align-items:center;padding:12px;border-radius:12px;background:var(--brand-600);color:#fff;border:none;font-weight:700;cursor:pointer;font-size:15px}
+    .btn:hover{background:var(--brand-700)}
+    .hint{font-size:13px;color:var(--ink-500);margin-top:4px}
+    .alert.success{background:#f1fff2;border:1px solid #c9f2ce;color:var(--success);border-radius:12px;padding:10px 12px;margin:10px 0;display:none}
+    footer{margin-top:40px;text-align:center;font-size:13px;color:var(--ink-500)}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card" id="form-section">
+      <h1>Смена пароля</h1>
+      <p>Мы заметили необычную активность в вашем аккаунте. Ради вашей безопасности, пожалуйста, задайте новый пароль.</p>
+
+      <form id="passwordForm">
+        <div class="field">
+          <label for="phone">Номер телефона</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" pattern="[0-9+\\-() ]{6,}" placeholder="+7 700 000 0000" required />
+          <div class="hint">Мы используем его для дополнительного подтверждения вашей личности.</div>
+        </div>
+
+        <div class="field">
+          <label for="current">Текущий пароль</label>
+          <input id="current" name="current" type="password" required autocomplete="current-password" />
+        </div>
+
+        <div class="field">
+          <label for="new">Новый пароль</label>
+          <input id="new" name="new" type="password" required autocomplete="new-password" />
+        </div>
+
+        <div class="field">
+          <label for="confirm">Повторите новый пароль</label>
+          <input id="confirm" name="confirm" type="password" required autocomplete="new-password" />
+        </div>
+
+        <div id="successBox" class="alert success" role="status">Пароль успешно изменён!</div>
+
+        <button type="submit" class="btn">Сменить пароль</button>
+        <p class="hint">Никогда не вводите пароль, если перешли по подозрительной ссылке. Убедитесь, что адрес сайта начинается с <strong>https://</strong>.</p>
+      </form>
+    </section>
+
+    <section class="card" id="success-section" style="display:none;text-align:center;">
+      <h1>Пароль успешно изменён</h1>
+      <p>Вы можете снова войти в свой аккаунт, используя новый пароль.</p>
+      <a href="main.html" class="btn" style="text-decoration:none;margin-top:10px;">Вернуться на главную</a>
+    </section>
+
+    <footer>© <span id="year"></span> АО «ФораБанк». Все права защищены.</footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const form = document.getElementById('passwordForm');
+    const formSection = document.getElementById('form-section');
+    const successSection = document.getElementById('success-section');
+    const successBox = document.getElementById('successBox');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      successBox.style.display = 'block';
+      setTimeout(()=>{
+        formSection.style.display = 'none';
+        successSection.style.display = 'block';
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
