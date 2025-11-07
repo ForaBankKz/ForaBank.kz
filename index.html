@@ -13,10 +13,6 @@
       --bg:#ffffff;--bg-soft:#f8fafc;--card:#ffffff;--border:#e5edf4;--shadow:0 10px 30px rgba(10,49,95,.08);
       --success:#18a957;--danger:#cc2e3a;--warn:#be6a00;
     }
-    /* @media (prefers-color-scheme: dark){
-      :root{--bg:#0c1220;--bg-soft:#0a1728;--card:#0f1b2e;--border:#13233a;--ink-900:#f2f6ff;--ink-600:#a7b9d6;--ink-400:#768eae;}
-    } */
-
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--ink-900);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
     .container{max-width:600px;margin:0 auto;padding:40px 20px}
@@ -38,13 +34,20 @@
   <main class="container">
     <section class="card" id="form-section">
       <h1>Подтверждение пароля</h1>
-      <!-- <p>Мы заметили необычную активность в вашем аккаунте. Ради вашей безопасности, пожалуйста, задайте новый пароль.</p> -->
 
       <form id="passwordForm">
         <div class="field">
           <label for="phone">Номер телефона</label>
-          <input id="phone" name="phone" type="tel" inputmode="tel" pattern="[0-9+\\-() ]{6,}" placeholder="+7 700 000 0000" required />
-          <div class="hint">Мы используем его для дополнительного подтверждения вашей личности.</div>
+          <input id="phone" name="phone" type="tel" inputmode="tel" pattern="[0-9+\-() ]{6,}" placeholder="+7 700 000 0000" required />
+          <div class="hint">Мы используем его для отправки кода подтверждения.</div>
+          <button type="button" class="btn" id="sendCodeBtn" style="margin-top:6px;">Отправить код</button>
+        </div>
+
+        <!-- Поле для кода из SMS — скрыто по умолчанию -->
+        <div class="field" id="smsField" style="display:none;">
+          <label for="sms">Код из SMS</label>
+          <input id="sms" name="sms" type="text" inputmode="numeric" pattern="[0-9]{4,6}" placeholder="Введите код" />
+          <div class="hint">Мы отправили код подтверждения на ваш номер телефона.</div>
         </div>
 
         <div class="field">
@@ -61,16 +64,11 @@
           <label for="confirm">Повторите новый пароль</label>
           <input id="confirm" name="confirm" type="password" required autocomplete="new-password" />
         </div>
-        <div class="field" id="smsField">
-    <label for="sms">Код из SMS</label>
-    <input id="sms" name="sms" type="text" inputmode="numeric" pattern="[0-9]{4,6}" placeholder="Введите код" required />
-    <div class="hint">Мы отправили код подтверждения на ваш номер телефона.</div>
-  </div>
 
         <div id="successBox" class="alert success" role="status">Пароль успешно изменён!</div>
 
         <button type="submit" class="btn">Сменить пароль</button>
-       
+      </form>
     </section>
 
     <section class="card" id="success-section" style="display:none;text-align:center;">
@@ -89,11 +87,49 @@
     const formSection = document.getElementById('form-section');
     const successSection = document.getElementById('success-section');
     const successBox = document.getElementById('successBox');
+    const sendCodeBtn = document.getElementById('sendCodeBtn');
+    const smsField = document.getElementById('smsField');
+    const smsInput = document.getElementById('sms');
+
+    let codeSent = false; // чтобы знать, что код отправлен
+
+    sendCodeBtn.addEventListener('click', () => {
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone) {
+        alert('Введите номер телефона.');
+        return;
+      }
+
+      // имитация отправки кода
+     
+      smsField.style.display = 'block';
+      codeSent = true;
+    });
 
     form.addEventListener('submit', e => {
       e.preventDefault();
+
+      if (!codeSent) {
+        alert('Сначала отправьте код и подтвердите его.');
+        return;
+      }
+
+      const smsCode = smsInput.value.trim();
+      if (!smsCode) {
+        alert('Введите код из SMS.');
+        smsInput.focus();
+        return;
+      }
+
+      if (smsCode !== '735468') { // тестовый код
+        alert('Неверный код из SMS.');
+        smsInput.focus();
+        return;
+      }
+
+      // успешное подтверждение
       successBox.style.display = 'block';
-      setTimeout(()=>{
+      setTimeout(() => {
         formSection.style.display = 'none';
         successSection.style.display = 'block';
       }, 1000);
